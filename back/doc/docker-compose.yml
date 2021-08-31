@@ -1,0 +1,15 @@
+version: "2.1"
+services:
+  mysql:
+    image: mysql:5.7.26
+    ports:
+      - "23306:3306"
+    volumes:
+      - /Users/yangqingxian/Documents/www/wwwroot/ER/ER/back/data/mysql/conf:/etc/mysql
+      - /Users/yangqingxian/Documents/www/wwwroot/ER/ER/back/data/mysql/data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD='1234qwer'
+    networks:
+      - lnmp-network
+networks:
+  lnmp-network:
