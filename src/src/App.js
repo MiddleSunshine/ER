@@ -1,17 +1,23 @@
-import { Layout } from 'antd';
 import React from 'react'
-
-const { Header, Footer, Sider, Content } = Layout;
+import { BrowserRouter, Route } from "react-router-dom";
+import routers from './config/routers.tsx'
 
 
 class App extends React.Component {
   render() {
     return (
-      <Layout>
-                  <Header>Header</Header>
-                  <Content>Content</Content>
-                  <Footer>Footer</Footer>
-                </Layout>
+      <BrowserRouter>
+        {
+          routers.map(router => {
+            return (
+              <Route
+                path={router.path}
+                component={router.component}
+              ></Route>
+            )
+          })
+        }
+      </BrowserRouter>
     )
   }
 }
