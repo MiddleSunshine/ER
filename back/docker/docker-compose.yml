@@ -9,7 +9,6 @@ services:
       - /Users/yangqingxian/Documents/www/wwwroot/ER/ER/back/php:/app
       - /Users/yangqingxian/Documents/www/wwwroot/ER/ER/back/nginx/conf:/opt/bitnami/nginx/conf/server_blocks
       - /Users/yangqingxian/Documents/www/wwwroot/ER/ER/back/nginx/log:/opt/bitnami/nginx/logs
-      - /Users/yangqingxian/Documents/www/wwwroot/ER/ER/back/docker/nginx.hosts:/etc/hosts
     networks:
       lnmp-network:
         ipv4_address: 172.19.0.2
@@ -17,7 +16,6 @@ services:
     image: bitnami/php-fpm
     volumes:
       - /Users/yangqingxian/Documents/www/wwwroot/ER/ER/back/php:/app
-      - /Users/yangqingxian/Documents/www/wwwroot/ER/ER/back/docker/php.hosts:/etc/hosts
     networks:
       lnmp-network:
         ipv4_address: 172.19.0.3

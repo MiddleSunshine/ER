@@ -14,3 +14,7 @@ back/data/mysql/data/*.pid
 back/data/mysql/data/*.cnf
 
 back/nginx/log/
+
+back/docker/nginx.hosts
+
+back/docker/php.hosts
