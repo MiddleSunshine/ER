@@ -1,7 +1,7 @@
 import React from 'react'
 import { BrowserRouter, Route } from "react-router-dom";
 import routers from './config/routers.tsx'
-
+import Index from './page/index'
 
 class App extends React.Component {
   render() {
@@ -13,7 +13,8 @@ class App extends React.Component {
               <Route
                 path={router.path}
                 component={router.component}
-              ></Route>
+              >
+              </Route>
             )
           })
         }
