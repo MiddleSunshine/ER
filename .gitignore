@@ -12,3 +12,5 @@ back/data/mysql/data/sys
 back/data/mysql/data/ib*
 back/data/mysql/data/*.pid
 back/data/mysql/data/*.cnf
+
+back/nginx/log/

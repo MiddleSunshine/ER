@@ -1,15 +1,41 @@
 version: "2.1"
 services:
+  nginx:
+    image: "bitnami/nginx:latest"
+    ports:
+      - "8090:8080"
+    tty: true
+    volumes:
+      - /Users/yangqingxian/Documents/www/wwwroot/ER/ER/back/php:/app
+      - /Users/yangqingxian/Documents/www/wwwroot/ER/ER/back/nginx/conf:/opt/bitnami/nginx/conf/server_blocks
+      - /Users/yangqingxian/Documents/www/wwwroot/ER/ER/back/nginx/log:/opt/bitnami/nginx/logs
+    networks:
+      lnmp-network:
+        ipv4_address: 172.19.0.2
+  php:
+    image: bitnami/php-fpm
+    volumes:
+      - /Users/yangqingxian/Documents/www/wwwroot/ER/ER/back/php:/app
+    networks:
+      lnmp-network:
+        ipv4_address: 172.19.0.3
+    links:
+      - "nginx: nginx_service"
+      - "mysql: mysql_service"
   mysql:
     image: mysql:5.7.26
     ports:
       - "23306:3306"
     volumes:
-      - /Users/yangqingxian/Documents/www/wwwroot/ER/ER/back/data/mysql/conf:/etc/mysql
-      - /Users/yangqingxian/Documents/www/wwwroot/ER/ER/back/data/mysql/data:/var/lib/mysql
+      - /Users/yangqingxian/Documents/Code/lnmp/mysql/conf:/etc/mysql
+      - /Users/yangqingxian/Documents/Code/lnmp/mysql/data:/var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD='1234qwer'
     networks:
-      - lnmp-network
+      lnmp-network:
+        ipv4_address: 172.19.0.5
 networks:
   lnmp-network:
+    ipam:
+      config:
+        - subnet: 172.19.0.0/16
