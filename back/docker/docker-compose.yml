@@ -27,8 +27,8 @@ services:
     ports:
       - "23306:3306"
     volumes:
-      - /Users/yangqingxian/Documents/Code/lnmp/mysql/conf:/etc/mysql
-      - /Users/yangqingxian/Documents/Code/lnmp/mysql/data:/var/lib/mysql
+      - /Users/yangqingxian/Documents/www/wwwroot/ER/ER/back/data/mysql/conf:/etc/mysql
+      - /Users/yangqingxian/Documents/www/wwwroot/ER/ER/back/data/mysql/data:/var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD='1234qwer'
     networks:
