@@ -1,5 +1,6 @@
 import App from "../App";
 import WordsList from "../page/WordsList";
+import WordEdit from "../page/WordEdit.js";
 
 interface router {
     path: string,
@@ -19,7 +20,16 @@ const routers: Array<router> = [
         path: "/words",
         component:WordsList,
         children: [
-            
+            {
+                path:"/edit",
+                component:WordEdit,
+                children:[]
+            },
+            {
+                path:"/create",
+                component:WordEdit,
+                children:[]
+            }
         ]
     }
 ]
