@@ -6,7 +6,7 @@ class Index extends React.Component {
         return (
             <div>
                 <div>
-                    <a href="./words/create">输入新的内容</a>
+                    <a href="./web">网页版入口</a>
                 </div>
             </div>
         )
