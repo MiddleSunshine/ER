@@ -14,4 +14,58 @@ class Words extends Base{
         self::addKey($words,'ID','key');
         return self::returnActionResult($words);
     }
+    public function Detail(){
+        $id=$this->get['id'] ?? 0;
+        if (!$id){
+            return self::returnActionResult([],false,"参数错误，没有ID");
+        }
+        $sql="select * from words where ID={$id};";
+        return self::returnActionResult($this->pdo->getFirstRow($sql));
+    }
+
+    public function Save(){
+        $id=$this->get['id'] ?? 0;
+        $fieldMap=[
+            'word'=>'',
+            'phonetic_transcription'=>'',
+            'related_word_1'=>'',
+            'related_word_2'=>'',
+            'related_word_3'=>'',
+            'note'=>'',
+            'explain'=>'',
+            'AddTime'=>date("Y-m-d H:i:s"),
+            'LastUpdateTime'=>date("Y-m-d H:i:s"),
+            'source'=>''
+        ];
+        $sql=[];
+        $this->post=json_decode($this->post,1);
+        foreach ($this->post as $filed=>$value){
+            switch ($filed){
+                case "ID":
+                    break;
+                case 'explain':
+                    $filed=sprintf('`%s`',$filed);
+                case "LastUpdateTime":
+                    $value=date("Y-m-d H:i:s");
+                default:
+                    $sql[$filed]=sprintf("%s='%s'",$filed,addslashes($value ?? $fieldMap[$filed]));
+            }
+        }
+        if($id){
+            $sql=implode(",",$sql);
+            // udpate
+            $sql="update words set {$sql} where ID={$id};";
+        }else{
+            // FIXME 这里考虑这word已经存在的情况
+            // insert
+            $sql=sprintf("insert into words(%s) value(%s)",implode(",",array_keys($sql)),implode(",",$sql));
+        }
+        $this->pdo->query($sql);
+        $sql=sprintf("select ID from words where word='%s';",$this->post['word'] ?? '');
+        $word=$this->pdo->getFirstRow($sql);
+        return self::returnActionResult([
+            'sql'=>$sql,
+            'ID'=>$word['ID'] ?? 0
+        ]);
+    }
 }

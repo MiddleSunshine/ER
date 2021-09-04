@@ -2,7 +2,7 @@ import React from 'react';
 import Header from '../component/Header'
 import Roads from '../component/Roads'
 import config from '../config/setting'
-
+import Word from '../component/Word'
 class WordEdit extends React.Component {
     constructor(props) {
         super(props);
@@ -22,7 +22,9 @@ class WordEdit extends React.Component {
                     />
                 </div>
                 <div className="row">
-                    {this.state.id}
+                    <Word
+                        id={this.state.id}
+                    />
                 </div>
 
             </div>

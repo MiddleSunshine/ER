@@ -1,3 +1,10 @@
 ### 获取单词列表
 
 GET {{domain_url}}/index.php?action=words&method=list
+
+### 保存
+
+POST {{domain_url}}/index.php?action=words&method=save&id=1
+Content-Type: application/json
+
+{"ID":"1","word":"word2","phonetic_transcription":null,"related_word_1":"1","related_word_2":"2","related_word_3":"3","note":null,"explain":"explain","AddTime":null,"LastUpdateTime":null,"source":"source"}
