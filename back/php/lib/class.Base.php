@@ -19,4 +19,9 @@ class Base{
             'Data'=>$returnData
         ];
     }
+    public static function addKey(&$data,$keyName,$newKeyName){
+        foreach ($data as &$value){
+            $value[$newKeyName]=$value[$keyName];
+        }
+    }
 }

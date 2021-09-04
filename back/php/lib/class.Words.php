@@ -9,7 +9,9 @@ class Words extends Base{
         if ($page && $pageSize){
             $sql=sprintf($sql." limit %d,%d",($page-1)*$pageSize,$pageSize);
         }
-        $sql.=";";
-        return self::returnActionResult($this->pdo->getRows($sql));
+        $sql.=" order by ID desc;";
+        $words=$this->pdo->getRows($sql);
+        self::addKey($words,'ID','key');
+        return self::returnActionResult($words);
     }
 }
