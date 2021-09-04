@@ -9,10 +9,12 @@ class Word extends React.Component {
         super(props);
         this.state = {
             word: {},
-            id: props.id
+            id: props.id,
+            editNote:false
         }
         this.getWordDetail = this.getWordDetail.bind(this);
         this.handleValueChange=this.handleValueChange.bind(this);
+        this.updateMarkdownHtml=this.updateMarkdownHtml.bind(this);
     }
     getWordDetail(id) {
         if (id == 0) {
@@ -23,19 +25,28 @@ class Word extends React.Component {
                 (res) => {
                     res.json().then((json) => {
                         this.setState({ word: json.Data })
-                        console.log(this.state.word)
+                    }).then(()=>{
+                        this.updateMarkdownHtml();
                     })
                 }
             ).catch((err) => {
 
             })
     }
-    componentDidMount() {
-        this.getWordDetail(this.state.id);
-        if(!isNaN(this.state.word.note)){
-            document.getElementById("note").innerHTML=marked(this.state.word.note);
+    updateMarkdownHtml(){
+        if (!this.state.editNote){
+            if(this.state.word.note && this.state.word.note.length){
+                document.getElementById("note").innerHTML=marked(this.state.word.note);
+            }
         }
     }
+    componentDidMount() {
+        this.getWordDetail(this.state.id);
+    }
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        this.updateMarkdownHtml();
+    }
+
     handleValueChange(event,name){
         let word=this.state.word;
         let value=event.target.value;
@@ -58,6 +69,8 @@ class Word extends React.Component {
             case "related_word_3":
                 word.related_word_3=value;
                 break;
+            case "note":
+                word.note=value;
         }
         this.setState({
             word:word
@@ -82,6 +95,20 @@ class Word extends React.Component {
         });
     }
     render() {
+        var notePart=<div></div>;
+        if (this.state.editNote){
+            notePart=<div>
+                <textarea
+                    className="markdown-textarea"
+                    value={this.state.word.note}
+                    onChange={(event)=>this.handleValueChange(event,'note')}
+                />
+            </div>;
+        }else{
+            notePart=<div className="markdown-preview">
+                <div id="note"></div>
+            </div>;
+        }
         return (
             <div className='container'>
                 <div className="row">
@@ -112,13 +139,16 @@ class Word extends React.Component {
                                 <Button
                                     icon={<EditOutlined />}
                                     type="primary"
+                                    onClick={()=>{
+                                        this.setState({
+                                            editNote:!this.state.editNote
+                                        })
+                                    }}
                                 >
-                                    Edit
+                                    {this.state.editNote?'Save':'Edit'}
                                 </Button>
                             </div>
-                            <div>
-                                <div id="note"></div>
-                            </div>
+                            {notePart}
                         </Form.Item>
                         <Form.Item label="Source">
                             <Input
