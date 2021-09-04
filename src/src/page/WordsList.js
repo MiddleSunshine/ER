@@ -1,7 +1,9 @@
-import { Table, Alert, Breadcrumb, Button } from 'antd';
+import { Table, Alert, Button } from 'antd';
+import { PlusCircleOutlined } from '@ant-design/icons'
 import React from 'react'
 import config from '../config/setting';
 import Header from '../component/Header'
+import Roads from '../component/Rods'
 
 class WordsList extends React.Component {
     constructor(props) {
@@ -61,26 +63,31 @@ class WordsList extends React.Component {
             })
     }
     render() {
+        const roads = [
+            { path: '/', name: 'Home' },
+            { path: '/web', name: 'Web' },
+            { path: '/words/list', name: 'Words List' }
+        ];
         return (
             <div className="container">
                 <div className="row">
                     <Header subTitle="Word List" />
                 </div>
                 <div className="row">
-                    <Breadcrumb>
-                        <Breadcrumb.Item>
-                            <a href="/">Home</a>
-                        </Breadcrumb.Item>
-                        <Breadcrumb.Item>
-                            <a href="/web">Web Index</a>
-                        </Breadcrumb.Item>
-                        <Breadcrumb.Item>
-                            <a href="/words/list">Web Index</a>
-                        </Breadcrumb.Item>
-                    </Breadcrumb>
+                    <Roads
+                        roads={roads}
+                    />
                 </div>
                 <div className="row">
-
+                    <Button
+                        icon={<PlusCircleOutlined />}
+                        type="primary"
+                        onClick={() => {
+                            window.location = "/words/create?id=0"
+                        }}
+                    >
+                        Create New Word
+                    </Button>
                 </div>
                 <div className="row">
                     <Table
