@@ -1,5 +1,8 @@
 <?php
 
+// 允许跨域
+header("Access-Control-Allow-Origin: *");
+
 define("PROD_DB_NAME","ER");
 define("PROD_DB_HOST","172.19.0.5");
 define("PROD_DB_USER","root");

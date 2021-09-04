@@ -1,8 +1,7 @@
 
-function getConfig(){
-    return {
-        'back_domain':''
-    };
+
+var config = {
+    back_domain: 'http://localhost:8090'
 }
 
-export default getConfig;
+export default config

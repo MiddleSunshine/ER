@@ -1,0 +1,3 @@
+### 获取单词列表
+
+GET {{domain_url}}/index.php?action=words&method=list
