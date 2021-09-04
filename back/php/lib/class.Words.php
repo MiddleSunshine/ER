@@ -46,19 +46,28 @@ class Words extends Base{
                 case 'explain':
                     $filed=sprintf('`%s`',$filed);
                 case "LastUpdateTime":
-                    $value=date("Y-m-d H:i:s");
+                    $filed=='LastUpdateTime' && $value=date("Y-m-d H:i:s");
                 default:
-                    $sql[$filed]=sprintf("%s='%s'",$filed,addslashes($value ?? $fieldMap[$filed]));
+                    $sql[$filed]=addslashes($value ?? $fieldMap[$filed]);
             }
         }
         if($id){
-            $sql=implode(",",$sql);
+            $sqlTemplate=[];
+            foreach ($sql as $filed=>$value){
+                $sqlTemplate[]=sprintf("%s='%s'",$filed,$value);
+            }
+            $sql=implode(",",$sqlTemplate);
             // udpate
             $sql="update words set {$sql} where ID={$id};";
         }else{
+            $sqlTemplate='';
+            foreach ($sql as $filed=>$value){
+                $sqlTemplate.=sprintf("'%s',",$value);
+            }
+            $sqlTemplate=substr($sqlTemplate,0,-1);
             // FIXME 这里考虑这word已经存在的情况
             // insert
-            $sql=sprintf("insert into words(%s) value(%s)",implode(",",array_keys($sql)),implode(",",$sql));
+            $sql=sprintf("insert into words(%s) value(%s)",implode(",",array_keys($sql)),$sqlTemplate);
         }
         $this->pdo->query($sql);
         $sql=sprintf("select ID from words where word='%s';",$this->post['word'] ?? '');
