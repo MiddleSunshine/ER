@@ -51,6 +51,8 @@ class Words extends Base{
                     $sql[$filed]=addslashes($value ?? $fieldMap[$filed]);
             }
         }
+        empty($sql['AddTime']) && $sql['AddTime']=addslashes(date("Y-m-d H:i:s"));
+        empty($sql['LastUpdateTime']) && $sql['LastUpdateTime']=addslashes(date("Y-m-d H:i:s"));
         if($id){
             $sqlTemplate=[];
             foreach ($sql as $filed=>$value){

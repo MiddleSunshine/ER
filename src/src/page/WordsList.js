@@ -36,7 +36,14 @@ class WordsList extends React.Component {
                     dataIndex: 'ID',
                     key: 'key',
                     render: (text, record) => {
-
+                        let url="/words/edit/"+record.ID
+                        return(
+                            <div>
+                                <div>
+                                    <a href={url} target="_blank">Edit</a>
+                                </div>
+                            </div>
+                        )
                     }
                 }
             ]

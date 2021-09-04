@@ -13,8 +13,8 @@ class webIndex extends React.Component {
                             <h1>web版</h1>
                             {/* 这里放图表或者是单词列表 */}
                             <ul class="nav nav-sidebar">
-                                <li><a href="./sentence/list">Sentence List</a></li>
-                                <li><a href="./words/list">Words List</a></li>
+                                <li><a href="/sentence/list">Sentence List</a></li>
+                                <li><a href="/words/list">Words List</a></li>
                             </ul>
                         </div>
                     </div>
