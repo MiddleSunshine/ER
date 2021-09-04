@@ -3,7 +3,7 @@ import { PlusCircleOutlined } from '@ant-design/icons'
 import React from 'react'
 import config from '../config/setting';
 import Header from '../component/Header'
-import Roads from '../component/Rods'
+import Roads from '../component/Roads'
 
 class WordsList extends React.Component {
     constructor(props) {
@@ -63,11 +63,7 @@ class WordsList extends React.Component {
             })
     }
     render() {
-        const roads = [
-            { path: '/', name: 'Home' },
-            { path: '/web', name: 'Web' },
-            { path: '/words/list', name: 'Words List' }
-        ];
+        const roads = config.common_road;
         return (
             <div className="container">
                 <div className="row">
@@ -83,7 +79,7 @@ class WordsList extends React.Component {
                         icon={<PlusCircleOutlined />}
                         type="primary"
                         onClick={() => {
-                            window.location = "/words/create?id=0"
+                            window.location = "/words/create/0"
                         }}
                     >
                         Create New Word

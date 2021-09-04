@@ -20,11 +20,11 @@ const routers: Array<router> = [
         component:WordsList
     },
     {
-        path:"/words/edit",
+        path:"/words/edit/:id",
         component:WordEdit
     },
     {
-        path:"/words/create",
+        path:"/words/create/:id",
         component:WordEdit
     },
     {
