@@ -145,7 +145,7 @@ class Word extends React.Component {
                                         })
                                     }}
                                 >
-                                    {this.state.editNote?'Save':'Edit'}
+                                    {this.state.editNote?'Finish':'Edit'}
                                 </Button>
                             </div>
                             {notePart}
