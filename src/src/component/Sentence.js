@@ -1,7 +1,8 @@
 import React from 'react';
 import config from "../config/setting";
-import {Form, Input, Button, Row, Col} from 'antd';
+import {Form, Input, Button, Row, Col,Modal} from 'antd';
 import {SaveOutlined, EditOutlined,FormOutlined,DeleteOutlined} from '@ant-design/icons'
+import WordModel from "./WordModel";
 
 const marked = require("marked");
 
@@ -13,7 +14,9 @@ class Sentence extends React.Component {
             sentence: {},
             editNote: false,
             wordsList:[],
-            wordsCount:0
+            wordsCount:0,
+            visible:false,
+            updateWord:''
         }
         this.getSentenceDetail = this.getSentenceDetail.bind(this);
         this.handleValueChange = this.handleValueChange.bind(this);
@@ -22,6 +25,7 @@ class Sentence extends React.Component {
         this.addWords=this.addWords.bind(this);
         this.deleteWord=this.deleteWord.bind(this);
         this.updateWord=this.updateWord.bind(this);
+        this.updateWordDetail=this.updateWordDetail.bind(this);
     }
 
     getSentenceDetail(id) {
@@ -111,6 +115,15 @@ class Sentence extends React.Component {
         });
     }
 
+    updateWordDetail(index){
+        this.setState({
+            updateWord:this.state.wordsList[index].value
+        });
+        this.setState({
+            visible:true
+        });
+    }
+
     render() {
         // note 部分管理
         var notePart = <div></div>;
@@ -143,6 +156,7 @@ class Sentence extends React.Component {
                                 type={"link"}
                                 shape={"round"}
                                 icon={<EditOutlined />}
+                                onClick={()=>this.updateWordDetail(index)}
                             >
                             </Button>
                             <Button
@@ -222,8 +236,35 @@ class Sentence extends React.Component {
                         <Row>
                             {words}
                         </Row>
+                        <Row style={{marginTop:"10px"}}>
+                            <Button
+                                icon={<SaveOutlined/>}
+                                type="primary"
+                            >
+                                Save Words
+                            </Button>
+                        </Row>
                     </Col>
                 </Row>
+                <div>
+                    <Modal
+                        visible={this.state.visible}
+                        onCancel={()=>{
+                            this.setState({
+                                visible:false
+                            })
+                        }}
+                        onOk={()=>{
+                            this.setState({
+                                visible:false
+                            })
+                        }}
+                    >
+                        <WordModel
+                            word={this.state.updateWord}
+                        />
+                    </Modal>
+                </div>
             </div>
         )
     }

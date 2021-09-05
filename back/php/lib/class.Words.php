@@ -4,6 +4,16 @@ require_once __DIR__.DIRECTORY_SEPARATOR."class.Base.php";
 class Words extends Base{
     protected $table='words';
 
+    public function GetID(){
+        $this->post=json_decode($this->post,1);
+        $word=$this->post['word'] ?? '';
+        $sql="select ID from {$this->table} where word='{$word}';";
+        $word=$this->pdo->getFirstRow($sql);
+        return self::returnActionResult([
+            'ID'=>$word['ID'] ?? 0
+        ]);
+    }
+
     public function Save(){
         $id=$this->get['id'] ?? 0;
         $fieldMap=[
