@@ -47,4 +47,31 @@ class Base{
             $value[$newKeyName]=$value[$keyName];
         }
     }
+    public function handleSql($sql,$id){
+        if($id){
+            $sqlTemplate=[];
+            foreach ($sql as $filed=>$value){
+                $sqlTemplate[]=sprintf("%s='%s'",$filed,$value);
+            }
+            $sql=implode(",",$sqlTemplate);
+            // udpate
+            $sql="update {$this->table} set {$sql} where ID={$id};";
+        }else{
+            $sqlTemplate='';
+            foreach ($sql as $filed=>$value){
+                $sqlTemplate.=sprintf("'%s',",$value);
+            }
+            $sqlTemplate=substr($sqlTemplate,0,-1);
+            // FIXME 这里考虑这word已经存在的情况
+            // insert
+            $sql=sprintf("insert into {$this->table}(%s) value(%s)",implode(",",array_keys($sql)),$sqlTemplate);
+        }
+        $this->pdo->query($sql);
+        $sql=sprintf("select ID from {$this->table} where word='%s';",$this->post['word'] ?? '');
+        $word=$this->pdo->getFirstRow($sql);
+        return self::returnActionResult([
+            'sql'=>$sql,
+            'ID'=>$word['ID'] ?? 0
+        ]);
+    }
 }

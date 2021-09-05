@@ -36,7 +36,7 @@ class Word extends React.Component {
     updateMarkdownHtml(){
         if (!this.state.editNote){
             if(this.state.word.note && this.state.word.note.length){
-                document.getElementById("note").innerHTML=marked(this.state.word.note);
+                document.getElementById(this.state.word.id+"_note").innerHTML=marked(this.state.word.note);
             }
         }
     }
@@ -106,7 +106,7 @@ class Word extends React.Component {
             </div>;
         }else{
             notePart=<div className="markdown-preview">
-                <div id="note"></div>
+                <div id={this.state.word.id+"_note"}></div>
             </div>;
         }
         return (
