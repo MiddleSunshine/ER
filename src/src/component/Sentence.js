@@ -1,7 +1,7 @@
 import React from 'react';
 import config from "../config/setting";
 import {Form, Input, Button, Row, Col} from 'antd';
-import {SaveOutlined, EditOutlined,FormOutlined} from '@ant-design/icons'
+import {SaveOutlined, EditOutlined,FormOutlined,DeleteOutlined} from '@ant-design/icons'
 
 const marked = require("marked");
 
@@ -20,6 +20,8 @@ class Sentence extends React.Component {
         this.updateMarkdownHtml = this.updateMarkdownHtml.bind(this);
         this.saveSentence = this.saveSentence.bind(this);
         this.addWords=this.addWords.bind(this);
+        this.deleteWord=this.deleteWord.bind(this);
+        this.updateWord=this.updateWord.bind(this);
     }
 
     getSentenceDetail(id) {
@@ -86,6 +88,28 @@ class Sentence extends React.Component {
             wordsCount:this.state.wordsCount+1
         });
     }
+    deleteWord(index){
+        let words=[];
+        let count=0;
+        for (let i=0;i<this.state.wordsCount;i++){
+            if(i!==index){
+                words[count]=this.state.wordsList[i];
+                count++;
+            }
+        }
+        this.setState({
+            wordsList:words,
+            wordsCount:count
+        });
+    }
+
+    updateWord(event,index){
+        let words=this.state.wordsList;
+        words[index].value=event.target.value;
+        this.setState({
+            wordsList:words
+        });
+    }
 
     render() {
         // note 部分管理
@@ -107,15 +131,26 @@ class Sentence extends React.Component {
         let words=this.state.wordsList.map((value,index)=>{
             return <Row key={index} justify="center" alian={"center"} style={{paddingTop:"10px"}}>
                         <Col span={19}>
-                            <Input />
+                            <Input
+                                value={this.state.wordsList[index].value}
+                                style={{height:"100%"}}
+                                onChange={(e)=>this.updateWord(e,index)}
+                            />
                         </Col>
                         <Col offset={1} span={4}>
                             <Button
-                                style={{height:"100%"}}
                                 size={"small"}
-                                type={"primary"}
+                                type={"link"}
                                 shape={"round"}
                                 icon={<EditOutlined />}
+                            >
+                            </Button>
+                            <Button
+                                icon={<DeleteOutlined />}
+                                size={"small"}
+                                type={"link"}
+                                shape={"round"}
+                                onClick={()=>this.deleteWord(index)}
                             >
                             </Button>
                         </Col>
