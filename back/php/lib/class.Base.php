@@ -6,7 +6,7 @@ class Base{
     protected $get;
     protected $post;
     protected $pdo;
-    public function __construct($get,$post)
+    public function __construct($get=[],$post=[])
     {
         $this->get=$get;
         $this->post=$post;
@@ -62,7 +62,12 @@ class Base{
                 $sqlTemplate.=sprintf("'%s',",$value);
             }
             $sqlTemplate=substr($sqlTemplate,0,-1);
-            // FIXME 这里考虑这word已经存在的情况
+            // insert 之前已有的值，然后就会变成 update
+            $sqlSearch=sprintf("select {$keyName},ID from {$this->table} where {$keyName}='%s'",$this->post[$keyName]);
+            $data=$this->pdo->getFirstRow($sqlSearch);
+            if (!empty($data)){
+                return $this->handleSql($sql,$data['id'],$keyName);
+            }
             // insert
             $sql=sprintf("insert into {$this->table}(%s) value(%s)",implode(",",array_keys($sql)),$sqlTemplate);
         }

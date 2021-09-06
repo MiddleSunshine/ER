@@ -13,7 +13,16 @@ class Words extends Base{
             'ID'=>$word['ID'] ?? 0
         ]);
     }
-
+    public function addNewWord($word){
+        if (empty($word)){
+            return 0;
+        }
+        $sql=sprintf("insert into words(word,AddTime,LastUpdateTime) value('%s','%s','%s')",$word,date("Y-m-d H:i:s"),date("Y-m-d H:i:s"));
+        $this->pdo->query($sql);
+        $sql=sprintf("select ID from words where word='%s';",$word);
+        $wordData=$this->pdo->getFirstRow($sql);
+        return $wordData['ID'] ?? 0;
+    }
     public function Save(){
         $id=$this->get['id'] ?? 0;
         $fieldMap=[

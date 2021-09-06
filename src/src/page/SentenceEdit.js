@@ -3,7 +3,7 @@ import Header from "../component/Header";
 import Roads from "../component/Roads";
 import config from "../config/setting";
 import Sentence from "../component/Sentence";
-import {Button, Col, Input, Modal, Row} from "antd";
+import {Button, Col, Input, Modal, Row,Alert} from "antd";
 import {DeleteOutlined, EditOutlined,FormOutlined,SaveOutlined} from "@ant-design/icons";
 import WordModel from "../component/WordModel";
 
@@ -63,6 +63,28 @@ class SentenceEdit extends React.Component{
         this.setState({
             visible:true
         });
+    }
+
+    saveWordList(){
+        fetch(
+            config.back_domain+"/index.php?action=sentence&method=saveWords",
+            {
+                method:"post",
+                body:JSON.stringify({
+                    'word_list': this.state.wordsList,
+                    'sentence_id':this.state.id
+                })
+            }
+        ).then((res)=>{
+            res.json().then((json)=>{
+                let status=json.Status;
+                if(status!=1){
+                    alert(json.Message)
+                }
+            });
+        }).catch((error)=>{
+            console.error(error);
+        })
     }
     render(){
         let words=this.state.wordsList.map((value,index)=>{
