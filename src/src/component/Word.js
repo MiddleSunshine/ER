@@ -10,21 +10,24 @@ class Word extends React.Component {
         this.state = {
             word: {},
             id: props.id,
-            editNote:false
+            preId:0,
+            editNote:false,
         }
         this.getWordDetail = this.getWordDetail.bind(this);
         this.handleValueChange=this.handleValueChange.bind(this);
         this.updateMarkdownHtml=this.updateMarkdownHtml.bind(this);
     }
-    getWordDetail(id) {
-        if (id == 0) {
-            return false;
+    getWordDetail(id,forceUpdate=false) {
+        if(!forceUpdate){
+            if (id == 0 || id===undefined) {
+                return false;
+            }
         }
         fetch(config.back_domain + "/index.php?action=words&method=detail&id=" + id)
             .then(
                 (res) => {
                     res.json().then((json) => {
-                        this.setState({ word: json.Data })
+                        this.setState({ word: json.Data,preId:id })
                     }).then(()=>{
                         this.updateMarkdownHtml();
                     })
@@ -33,16 +36,20 @@ class Word extends React.Component {
 
             })
     }
+
     updateMarkdownHtml(){
         if (!this.state.editNote){
             if(this.state.word.note && this.state.word.note.length){
                 document.getElementById(this.state.word.id+"_note").innerHTML=marked(this.state.word.note);
+            }else{
+                document.getElementById(this.state.word.id+"_note").innerHTML=marked("");
             }
         }
     }
     componentDidMount() {
         this.getWordDetail(this.state.id);
     }
+
     componentDidUpdate(prevProps, prevState, snapshot) {
         this.updateMarkdownHtml();
     }
@@ -87,13 +94,20 @@ class Word extends React.Component {
                 this.setState({
                     id:ID
                 })
-            }).then(()=>{
-                window.location.href="/words/create/"+this.state.id;
+                return ID;
+            }).then((ID)=>{
+                this.getWordDetail(ID);
             });
         }).catch((error)=>{
             console.error(error);
         });
     }
+    componentWillReceiveProps(nextProps, nextContext) {
+        if(nextProps.id!=this.state.preId){
+            this.getWordDetail(nextProps.id,true);
+        }
+    }
+
     render() {
         var notePart=<div></div>;
         if (this.state.editNote){
