@@ -42,10 +42,11 @@ class Sentence extends Base{
         $wordInstance=new Words();
         $wordIds=[];
         foreach ($this->post['word_list'] as $wordItem){
-            $sql=sprintf("select ID from words where word='%s';",$wordItem);
+            $wordData=$wordItem['word'];
+            $sql=sprintf("select ID from words where word='%s';",$wordData);
             $word=$this->pdo->getFirstRow($sql);
-            if (!empty($word)){
-                $wordId=$wordInstance->addNewWord($wordItem);
+            if (empty($word)){
+                $wordId=$wordInstance->addNewWord($wordData);
                 if (!$wordId){
                     return self::returnActionResult($this->post,false,"代码错误");
                 }
