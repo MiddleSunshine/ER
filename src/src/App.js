@@ -1,7 +1,7 @@
 import React from 'react'
-import { BrowserRouter, Route,Switch } from "react-router-dom";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 import routers from './config/routers.tsx'
-import Index from './page/index'
+import './css/global.css';
 
 class App extends React.Component {
   render() {
@@ -12,6 +12,7 @@ class App extends React.Component {
             routers.map(router => {
               return (
                 <Route
+                  key={router.path}
                   path={router.path}
                   component={router.component}
                 >
@@ -19,7 +20,7 @@ class App extends React.Component {
               )
             })
           }
-          </Switch>
+        </Switch>
       </BrowserRouter>
     )
   }

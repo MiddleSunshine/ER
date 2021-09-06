@@ -3,6 +3,7 @@ import WordEdit from "../page/WordEdit.js";
 import Index from '../page/index'
 import webIndex from '../page/webIndex.js';
 import SentenceList from '../page/SentenceList';
+import SentenceEdit from "../page/SentenceEdit";
 
 interface router {
     path: string,
@@ -10,7 +11,15 @@ interface router {
     children?: Array<router>
 }
 
-const routers: Array<router> = [    
+const routers: Array<router> = [
+    {
+        path:'/sentence/create/:id',
+        component:SentenceEdit
+    },
+    {
+        path:'/sentence/edit/:id',
+        component:SentenceEdit
+    },
     {
         path:'/sentence/list',
         component:SentenceList
@@ -20,11 +29,11 @@ const routers: Array<router> = [
         component:WordsList
     },
     {
-        path:"/words/edit",
+        path:"/words/edit/:id",
         component:WordEdit
     },
     {
-        path:"/words/create",
+        path:"/words/create/:id",
         component:WordEdit
     },
     {
