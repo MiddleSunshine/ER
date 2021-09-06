@@ -21,11 +21,12 @@ class SentenceEdit extends React.Component{
         this.deleteWord=this.deleteWord.bind(this);
         this.updateWord=this.updateWord.bind(this);
         this.updateWordDetail=this.updateWordDetail.bind(this);
+        this.saveWordList=this.saveWordList.bind(this);
     }
     addWords(){
         let words=this.state.wordsList;
         words[this.state.wordsCount]={
-            id:0,
+            ID:0,
             word:''
         };
         this.setState({
@@ -50,7 +51,7 @@ class SentenceEdit extends React.Component{
 
     updateWord(event,index){
         let words=this.state.wordsList;
-        words[index].value=event.target.value;
+        words[index].word=event.target.value;
         this.setState({
             wordsList:words
         });
@@ -58,7 +59,7 @@ class SentenceEdit extends React.Component{
 
     updateWordDetail(index){
         this.setState({
-            updateWord:this.state.wordsList[index].value
+            updateWord:this.state.wordsList[index].word
         });
         this.setState({
             visible:true
@@ -91,7 +92,7 @@ class SentenceEdit extends React.Component{
             return <Row key={index} justify="center" alian={"center"} style={{paddingTop:"10px"}}>
                 <Col span={19}>
                     <Input
-                        value={this.state.wordsList[index].value}
+                        value={this.state.wordsList[index].word}
                         style={{height:"100%"}}
                         onChange={(e)=>this.updateWord(e,index)}
                     />
@@ -130,6 +131,7 @@ class SentenceEdit extends React.Component{
                     <Col span={15}>
                         <Sentence
                             id={this.state.id}
+                            afterSaveUrl={"http://localhost:3000/sentence/edit/"}
                         />
                     </Col>
                     <Col offset={1} span={8}>
@@ -149,6 +151,7 @@ class SentenceEdit extends React.Component{
                             <Button
                                 icon={<SaveOutlined/>}
                                 type="primary"
+                                onClick={()=>this.saveWordList()}
                             >
                                 Save Words
                             </Button>

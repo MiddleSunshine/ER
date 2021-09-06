@@ -16,7 +16,7 @@ class Sentence extends React.Component {
             wordsList:[],
             wordsCount:0,
             visible:false,
-            updateWord:''
+            afterSaveUrl:props.afterSaveUrl
         }
         this.getSentenceDetail = this.getSentenceDetail.bind(this);
         this.handleValueChange = this.handleValueChange.bind(this);
@@ -85,6 +85,11 @@ class Sentence extends React.Component {
         }).then((res)=>{
             res.json().then((json)=>{
                 this.getSentenceDetail(json.Data.ID);
+                return json.Data.ID;
+            }).then((ID)=>{
+                if(this.state.afterSaveUrl){
+                    window.location.href=this.state.afterSaveUrl+ID;
+                }
             })
         }).catch((error)=>{
             console.error(error);

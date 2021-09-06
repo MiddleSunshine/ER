@@ -1,7 +1,7 @@
 <?php
 
 class SentenceWord extends Base{
-    public $table="sentence_wor";
+    public $table="sentence_word";
     public function updateSentenceWord($sentenceId,$wordIds){
         $sql=sprintf("select Word_ID,ID from {$this->table} where Sentence_ID=%d",$sentenceId);
         $databaseWordIds=$this->pdo->getRows($sql,'Word_ID');

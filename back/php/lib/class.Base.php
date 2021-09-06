@@ -66,7 +66,7 @@ class Base{
             $sqlSearch=sprintf("select {$keyName},ID from {$this->table} where {$keyName}='%s'",$this->post[$keyName]);
             $data=$this->pdo->getFirstRow($sqlSearch);
             if (!empty($data)){
-                return $this->handleSql($sql,$data['id'],$keyName);
+                return $this->handleSql($sql,$data['ID'],$keyName);
             }
             // insert
             $sql=sprintf("insert into {$this->table}(%s) value(%s)",implode(",",array_keys($sql)),$sqlTemplate);
