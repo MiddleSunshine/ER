@@ -27,7 +27,7 @@ class Word extends React.Component {
             .then(
                 (res) => {
                     res.json().then((json) => {
-                        this.setState({ word: json.Data,preId:id })
+                        this.setState({ word: json.Data,preId:id,id:id })
                     }).then(()=>{
                         this.updateMarkdownHtml();
                     })

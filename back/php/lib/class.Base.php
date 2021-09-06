@@ -47,7 +47,7 @@ class Base{
             $value[$newKeyName]=$value[$keyName];
         }
     }
-    public function handleSql($sql,$id){
+    public function handleSql($sql,$id,$keyName){
         if($id){
             $sqlTemplate=[];
             foreach ($sql as $filed=>$value){
@@ -67,7 +67,7 @@ class Base{
             $sql=sprintf("insert into {$this->table}(%s) value(%s)",implode(",",array_keys($sql)),$sqlTemplate);
         }
         $this->pdo->query($sql);
-        $sql=sprintf("select ID from {$this->table} where word='%s';",$this->post['word'] ?? '');
+        $sql=sprintf("select ID from {$this->table} where {$keyName}='%s';",$this->post[$keyName] ?? '');
         $word=$this->pdo->getFirstRow($sql);
         return self::returnActionResult([
             'sql'=>$sql,

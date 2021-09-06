@@ -27,6 +27,6 @@ class Sentence extends Base{
         }
         empty($sql['AddTime']) && $sql['AddTime']=addslashes(date("Y-m-d H:i:s"));
         empty($sql['LastUpdateTime']) && $sql['LastUpdateTime']=addslashes(date("Y-m-d H:i:s"));
-        return $this->handleSql($sql,$id);
+        return $this->handleSql($sql,$id,'sentence');
     }
 }

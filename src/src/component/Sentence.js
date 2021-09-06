@@ -11,7 +11,7 @@ class Sentence extends React.Component {
         super(props);
         this.state = {
             id: props.id,
-            sentence: {},
+            sentenceData: {},
             editNote: false,
             wordsList:[],
             wordsCount:0,
@@ -29,12 +29,16 @@ class Sentence extends React.Component {
     }
 
     getSentenceDetail(id) {
+        if (id==0 || id==undefined){
+            return false;
+        }
         fetch(
             config.back_domain + "/index.php?action=sentence&method=detail&id=" + id
         ).then((res) => {
             res.json().then((json) => {
                 this.setState({
-                    sentence: json.Data
+                    sentenceData: json.Data,
+                    id:id
                 })
             })
         }).catch((error) => {
@@ -47,7 +51,7 @@ class Sentence extends React.Component {
     }
 
     handleValueChange(event, type) {
-        let sentence = this.state.sentence;
+        let sentence = this.state.sentenceData;
         let value = event.target.value;
         switch (type) {
             case 'note':
@@ -61,14 +65,14 @@ class Sentence extends React.Component {
                 break;
         }
         this.setState({
-            sentence: sentence
+            sentenceData: sentence
         });
     }
 
     updateMarkdownHtml() {
         if (!this.state.editNote) {
-            if (this.state.sentence.note && this.state.sentence.note.length) {
-                document.getElementById(this.state.sentence.id + "_sentence_note").innerHTML = marked(this.state.sentence.note);
+            if (this.state.sentenceData.note && this.state.sentenceData.note.length) {
+                document.getElementById(this.state.sentenceData.id + "_sentence_note").innerHTML = marked(this.state.sentenceData.note);
             }
         }
     }
@@ -78,7 +82,17 @@ class Sentence extends React.Component {
     }
 
     saveSentence() {
-
+        console.log(this.state.sentenceData);
+        fetch(config.back_domain+"/index.php?action=sentence&method=save&id="+this.state.id,{
+            method:"post",
+            body:JSON.stringify(this.state.sentenceData)
+        }).then((res)=>{
+            res.json().then((json)=>{
+                this.getSentenceDetail(json.Data.ID);
+            })
+        }).catch((error)=>{
+            console.error(error);
+        })
     }
 
     addWords(){
@@ -131,13 +145,13 @@ class Sentence extends React.Component {
             notePart = <div>
                 <textarea
                     className="markdown-textarea"
-                    value={this.state.sentence.note}
+                    value={this.state.sentenceData.note}
                     onChange={(event) => this.handleValueChange(event, 'note')}
                 />
             </div>;
         } else {
             notePart = <div className="markdown-preview">
-                <div id={this.state.sentence.ID + "_sentence_note"}></div>
+                <div id={this.state.sentenceData.ID + "_sentence_note"}></div>
             </div>;
         }
         // words部分管理
@@ -175,9 +189,9 @@ class Sentence extends React.Component {
                 <Row>
                     <Col span={15}>
                         <div className="row">
-                            <h3>ID:{this.state.sentence.ID}</h3>
-                            <h3>AddTime:{this.state.sentence.AddTime}</h3>
-                            <h3>LastUpdateTime:{this.state.sentence.LastUpdateTime}</h3>
+                            <h3>ID:{this.state.sentenceData.ID}</h3>
+                            <h3>AddTime:{this.state.sentenceData.AddTime}</h3>
+                            <h3>LastUpdateTime:{this.state.sentenceData.LastUpdateTime}</h3>
                         </div>
                         <div className="row">
                             <Form
@@ -186,14 +200,14 @@ class Sentence extends React.Component {
                                 <Form.Item label="Sentence">
                                     <Input
                                         placeholder="Sentence"
-                                        value={this.state.sentence.sentence}
+                                        value={this.state.sentenceData.sentence}
                                         onChange={(e) => this.handleValueChange(e, 'sentence')}
                                     />
                                 </Form.Item>
                                 <Form.Item label="Source">
                                     <Input
                                         placeholder="Source"
-                                        value={this.state.sentence.source}
+                                        value={this.state.sentenceData.source}
                                         onChange={(e) => this.handleValueChange(e, 'source')}
                                     />
                                 </Form.Item>
