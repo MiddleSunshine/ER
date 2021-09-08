@@ -262,17 +262,20 @@ var symbolMap={
     }
 };
 
-class Symbol extends React.Component{
-    render() {
-        return(
-            <span>
-
-            </span>
-        )
-    }
-}
-
 class PhoneticSymbol extends React.Component{
+    constructor(props) {
+        super(props);
+        this.state={
+            source:''
+        }
+        this.playMp3=this.playMp3.bind(this);
+    }
+    playMp3(source){
+        console.log(source);
+        this.setState({
+            source:"./media/"+source
+        });
+    }
     render() {
         return(
             <div className={"table-responsive"}>
@@ -283,7 +286,7 @@ class PhoneticSymbol extends React.Component{
                         <td>长元音</td>
                         <td>
                             {symbolMap.yuanyin.danyuanyin.changyuanyin.map((item)=>{
-                                return <span key={item.id}>{item.img}</span>
+                                return <span onClick={()=>this.playMp3(item.media)} key={item.id}>{item.img}</span>
                             })}
                         </td>
                     </tr>
@@ -339,6 +342,9 @@ class PhoneticSymbol extends React.Component{
                         </td>
                     </tr>
                 </table>
+                <audio controls={"controls"} autoplay={"autoplay"}>
+                    <source src={this.state.media} type="audio/mpeg" />
+                </audio>
             </div>
         )
     }
