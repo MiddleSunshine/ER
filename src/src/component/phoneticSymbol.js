@@ -271,14 +271,44 @@ class PhoneticSymbol extends React.Component{
         super(props);
         this.state={
             media:'',
-            symbols:[]
+            symbols:[],
+            sounds:'',
+            symbolMap:this.getSymbolMap()
         }
         this.playMp3=this.playMp3.bind(this);
         this.updateWords=this.updateWords.bind(this);
         this.saveWords=this.saveWords.bind(this);
+        this.playSound=this.playSound.bind(this);
+    }
+    getSymbolMap(){
+        let map={};
+        symbolMap.yuanyin.danyuanyin.changyuanyin.map((item)=>{
+            let symbol=item.img.slice(1,-1);
+            map[symbol]=item.media;
+        });
+        symbolMap.yuanyin.danyuanyin.duanyuanyin.map((item)=>{
+            let symbol=item.img.slice(1,-1);
+            map[symbol]=item.media;
+        })
+        symbolMap.yuanyin.shuangyuanyin.map((item)=>{
+            let symbol=item.img.slice(1,-1);
+            map[symbol]=item.media;
+        });
+        symbolMap.fuyin.qitafuyin.map((item)=>{
+            let symbol=item.img.slice(1,-1);
+            map[symbol]=item.media;
+        });
+        symbolMap.fuyin.zhuofuyin.map((item)=>{
+            let symbol=item.img.slice(1,-1);
+            map[symbol]=item.media;
+        });
+        symbolMap.fuyin.qitafuyin.map((item)=>{
+            let symbol=item.img.slice(1,-1);
+            map[symbol]=item.media;
+        })
+        return map;
     }
     playMp3(source,img){
-        console.log(source);
         let symbol=img.slice(1,-1);
         let symbols=this.state.symbols;
         symbols.push(symbol);
@@ -299,6 +329,18 @@ class PhoneticSymbol extends React.Component{
         let symbols=this.state.symbols.join(",");
         sessionStorage.setItem("symbols",symbols);
     }
+    playSound(index=0){
+        if (index>=this.state.symbols.length){
+            return false;
+        }
+        let sounds=this.state.symbols.map((key)=>{
+            return this.state.symbolMap[key];
+        });
+        this.setState({
+            sounds:config.front_domain+"/media/"+sounds[index]
+        });
+        setTimeout(()=>this.playSound(index+1),500);
+    }
     render() {
         return(
             <div className={"table-responsive"}>
@@ -315,6 +357,7 @@ class PhoneticSymbol extends React.Component{
                         icon={<AudioOutlined />}
                         type={"primary"}
                         style={{marginRight:"10px"}}
+                        onClick={()=>this.playSound()}
                     >
                     </Button>
                     <span>/</span>
@@ -389,6 +432,8 @@ class PhoneticSymbol extends React.Component{
                     </table>
                 </div>
                 <audio style={{display:"none"}} controls={"controls"} src={this.state.media} autoplay={"autoplay"}>
+                </audio>
+                <audio style={{display:"none"}} controls={"controls"}  autoplay={"autoplay"} src={this.state.sounds}>
                 </audio>
             </div>
         )
