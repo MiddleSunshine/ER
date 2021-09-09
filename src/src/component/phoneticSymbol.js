@@ -1,8 +1,8 @@
 import React from "react";
 import config from "../config/setting";
 import "../css/symbolKeybord.css"
-import {Button} from "antd";
-import {FormOutlined,AudioOutlined} from "@ant-design/icons";
+import {Button,message} from "antd";
+import {FormOutlined,AudioOutlined,ClearOutlined} from "@ant-design/icons";
 
 // https://www.hujiang.com/c/wx/p1288247/
 var symbolMap={
@@ -279,6 +279,7 @@ class PhoneticSymbol extends React.Component{
         this.updateWords=this.updateWords.bind(this);
         this.saveWords=this.saveWords.bind(this);
         this.playSound=this.playSound.bind(this);
+        this.cleanWords=this.cleanWords.bind(this);
     }
     getSymbolMap(){
         let map={};
@@ -328,6 +329,13 @@ class PhoneticSymbol extends React.Component{
     saveWords(){
         let symbols=this.state.symbols.join(",");
         sessionStorage.setItem("symbols",symbols);
+        let symbol=sessionStorage.getItem("symbols").split(",").join('');
+        message.success("Save Success: / "+symbol+" /");
+    }
+    cleanWords(){
+        this.setState({
+            symbols:[]
+        })
     }
     playSound(index=0){
         if (index>=this.state.symbols.length){
@@ -360,6 +368,7 @@ class PhoneticSymbol extends React.Component{
                         onClick={()=>this.playSound()}
                     >
                     </Button>
+                    <ClearOutlined style={{marginRight:"10px"}} onClick={()=>this.cleanWords()} />
                     <span>/</span>
                     {this.state.symbols.map((item,index)=>{
                         return <span onClick={()=>this.updateWords(index)}>{item}</span>;
