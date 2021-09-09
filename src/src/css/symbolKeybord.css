@@ -1,5 +1,28 @@
-span{
+table tr td{
+    border: 1px solid;
+}
+td{
+    text-align: left;
+    padding: 5px;
+}
+.symbol{
+    font-weight: bold;
+}
+td > span{
     font-size: 20px;
     margin-right: 5px;
     cursor: pointer;
+}
+
+td > span:hover{
+    color: #777777;
+}
+
+div > span{
+    padding: 2px;
+    cursor: pointer;
+}
+
+div > span:hover{
+    background-color: #8c8c8c;
 }
