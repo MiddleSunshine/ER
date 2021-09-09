@@ -20,3 +20,5 @@ back/docker/nginx.hosts
 back/docker/php.hosts
 
 .idea/
+
+src/build/
