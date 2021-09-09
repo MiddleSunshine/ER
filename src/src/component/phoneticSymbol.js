@@ -1,4 +1,6 @@
 import React from "react";
+import config from "../config/setting";
+import "../css/symbolKeybord.css"
 
 // https://www.hujiang.com/c/wx/p1288247/
 var symbolMap={
@@ -266,20 +268,20 @@ class PhoneticSymbol extends React.Component{
     constructor(props) {
         super(props);
         this.state={
-            source:''
+            media:''
         }
         this.playMp3=this.playMp3.bind(this);
     }
     playMp3(source){
         console.log(source);
         this.setState({
-            source:"./media/"+source
+            media:config.front_domain+"/media/"+source
         });
     }
     render() {
         return(
             <div className={"table-responsive"}>
-                <table className={"table table-hover table-condensed"}>
+                <table className={"table table-hover table-condensed symbol-keybord"}>
                     <tr>
                         <td rowSpan={3}>元音</td>
                         <td rowSpan={2}>单元音</td>
@@ -295,7 +297,7 @@ class PhoneticSymbol extends React.Component{
                         <td>
                             {
                                 symbolMap.yuanyin.danyuanyin.duanyuanyin.map((item)=>{
-                                    return <span key={item.id}>{item.img}</span>
+                                    return <span onClick={()=>this.playMp3(item.media)} key={item.id}>{item.img}</span>
                                 })
                             }
                         </td>
@@ -304,7 +306,7 @@ class PhoneticSymbol extends React.Component{
                         <td>双元音</td>
                         <td>
                             {symbolMap.yuanyin.shuangyuanyin.map((item)=>{
-                                return <span key={item.id}>{item.img}</span>
+                                return <span onClick={()=>this.playMp3(item.media)} key={item.id}>{item.img}</span>
                             })}
                         </td>
                     </tr>
@@ -317,7 +319,7 @@ class PhoneticSymbol extends React.Component{
                         </td>
                         <td>
                             {symbolMap.fuyin.qitafuyin.map((item)=>{
-                                return <span key={item.id}>{item.img}</span>
+                                return <span onClick={()=>this.playMp3(item.media)} key={item.id}>{item.img}</span>
                             })}
                         </td>
                     </tr>
@@ -327,7 +329,7 @@ class PhoneticSymbol extends React.Component{
                         </td>
                         <td>
                             {symbolMap.fuyin.zhuofuyin.map((item)=>{
-                                return <span key={item.id}>{item.img}</span>
+                                return <span onClick={()=>this.playMp3(item.media)} key={item.id}>{item.img}</span>
                             })}
                         </td>
                     </tr>
@@ -337,13 +339,12 @@ class PhoneticSymbol extends React.Component{
                         </td>
                         <td>
                             {symbolMap.fuyin.qitafuyin.map((item)=>{
-                                return <span key={item.id}>{item.img}</span>
+                                return <span onClick={()=>this.playMp3(item.media)} key={item.id}>{item.img}</span>
                             })}
                         </td>
                     </tr>
                 </table>
-                <audio controls={"controls"} autoplay={"autoplay"}>
-                    <source src={this.state.media} type="audio/mpeg" />
+                <audio controls={"controls"} src={this.state.media} autoplay={"autoplay"}>        
                 </audio>
             </div>
         )

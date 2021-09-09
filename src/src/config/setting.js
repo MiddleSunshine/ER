@@ -1,4 +1,5 @@
 var config = {
+    front_domain:'http://localhost:3000',
     back_domain: 'http://localhost:8090',
     common_road: [
         {path: '/', name: 'Home'},
