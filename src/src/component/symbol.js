@@ -296,5 +296,12 @@ export var saveSymbol=(symbols)=>{
 
 export var getSymbolString=()=>{
     let symbols=sessionStorage.getItem(sessionStorageKey);
+    if (!symbols){
+        return '';
+    }
     return symbols.split(",").join("");
+}
+
+export var getSymbolSaveData=()=>{
+    return sessionStorage.getItem(sessionStorageKey);
 }

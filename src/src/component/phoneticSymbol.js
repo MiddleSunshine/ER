@@ -3,7 +3,7 @@ import config from "../config/setting";
 import "../css/symbolKeybord.css"
 import {Button,message} from "antd";
 import {FormOutlined,AudioOutlined,ClearOutlined} from "@ant-design/icons";
-import {symbolMap,getSymbolMap,saveSymbol,getSymbolString} from "./symbol";
+import {symbolMap, getSymbolMap, saveSymbol, getSymbolString, getSymbolSaveData} from "./symbol";
 
 // https://www.hujiang.com/c/wx/p1288247/
 
@@ -63,6 +63,16 @@ class PhoneticSymbol extends React.Component{
         });
         setTimeout(()=>this.playSound(index+1),500);
     }
+    componentDidMount() {
+        let symbolList=getSymbolSaveData();
+        if (symbolList.length){
+            this.setState({
+                symbols:symbolList.split(',')
+            })
+        }
+
+    }
+
     render() {
         return(
             <div className={"table-responsive"}>

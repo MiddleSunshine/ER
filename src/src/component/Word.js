@@ -1,7 +1,10 @@
 import React from 'react'
 import config from '../config/setting';
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button,Modal } from 'antd';
 import {SaveOutlined,EditOutlined} from '@ant-design/icons'
+import PhoneticSymbol from "./phoneticSymbol";
+import {getSymbolSaveData, getSymbolString, saveSymbol} from "./symbol";
+
 const marked=require("marked");
 
 class Word extends React.Component {
@@ -12,6 +15,7 @@ class Word extends React.Component {
             id: props.id,
             preId:0,
             editNote:false,
+            keyboardModel:false
         }
         this.getWordDetail = this.getWordDetail.bind(this);
         this.handleValueChange=this.handleValueChange.bind(this);
@@ -27,9 +31,19 @@ class Word extends React.Component {
             .then(
                 (res) => {
                     res.json().then((json) => {
+                        if (json.Data.phonetic_transcription){
+                            saveSymbol(json.Data.phonetic_transcription);
+                        }
+                        return json;
+                    }).then((json)=>{
                         this.setState({ word: json.Data,preId:id,id:id })
-                    }).then(()=>{
+                    })
+                        .then(()=>{
                         this.updateMarkdownHtml();
+                    }).then(()=>{
+                        if(this.state.word.phonetic_transcription){
+                            saveSymbol(this.state.word.phonetic_transcription)
+                        }
                     })
                 }
             ).catch((err) => {
@@ -78,16 +92,19 @@ class Word extends React.Component {
                 break;
             case "note":
                 word.note=value;
+                break;
         }
         this.setState({
             word:word
         });
     }
     saveWord(){
+        let word=this.state.word;
+        word.phonetic_transcription=getSymbolSaveData();
         fetch(config.back_domain + "/index.php?action=words&method=save&id="+this.state.id,{
             method:"post",
             mode:"cors",
-            body:JSON.stringify(this.state.word)
+            body:JSON.stringify(word)
         }).then((res)=>{
             res.json().then((json)=>{
                 let ID=json.Data.ID;
@@ -140,6 +157,19 @@ class Word extends React.Component {
                                 value={this.state.word.word}
                                 onChange={(e)=>this.handleValueChange(e,'word')}
                             />
+                        </Form.Item>
+                        <Form.Item label="Phonetic Symbol">
+                            <Button
+                                icon={<EditOutlined />}
+                                type="primary"
+                                onClick={()=>{
+                                    this.setState({
+                                        keyboardModel:true
+                                    })
+                                }}
+                            >
+                                {getSymbolString()}
+                            </Button>
                         </Form.Item>
                         <Form.Item label="Explain">
                             <Input
@@ -200,6 +230,20 @@ class Word extends React.Component {
                             </Button>
                         </Form.Item>
                     </Form>
+                </div>
+                <div>
+                    <Modal
+                        title={"Phonetic Symbol"}
+                        visible={this.state.keyboardModel}
+                        footer={null}
+                        onCancel={()=>{
+                            this.setState({
+                                keyboardModel:false
+                            });
+                        }}
+                    >
+                        <PhoneticSymbol />
+                    </Modal>
                 </div>
             </div>
         )
