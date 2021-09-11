@@ -1,32 +1,32 @@
-import { Table, Button } from 'antd';
-import { PlusCircleOutlined } from '@ant-design/icons'
+import {Table, Button} from 'antd';
+import {PlusCircleOutlined} from '@ant-design/icons'
 import React from 'react'
 import config from '../config/setting';
 import Header from '../component/Header'
 import Roads from '../component/Roads'
 
-class SentenceList extends React.Component{
+class SentenceList extends React.Component {
     constructor(props) {
         super(props);
-        this.state= {
+        this.state = {
             columns: [
                 {
-                    title:'ID',
-                    dataIndex:'ID',
-                    key:'ID'
-                },
-                {
-                    title:'Sentence',
-                    dataIndex: 'sentence',
-                    key:'ID'
-                },
-                {
-                    title:'Option',
+                    title: 'ID',
                     dataIndex: 'ID',
-                    key:'ID',
-                    render:(text,record)=>{
-                        let url="/sentence/edit/"+record.ID;
-                        return(
+                    key: 'ID'
+                },
+                {
+                    title: 'Sentence',
+                    dataIndex: 'sentence',
+                    key: 'ID'
+                },
+                {
+                    title: 'Option',
+                    dataIndex: 'ID',
+                    key: 'ID',
+                    render: (text, record) => {
+                        let url = "/sentence/edit/" + record.ID;
+                        return (
                             <div>
                                 <div>
                                     <a href={url} target={"_blank"}>Edit</a>
@@ -36,30 +36,32 @@ class SentenceList extends React.Component{
                     }
                 }
             ],
-            data:[]
+            data: []
         }
-        this.getSentenceList=this.getSentenceList.bind(this);
+        this.getSentenceList = this.getSentenceList.bind(this);
     }
-    getSentenceList(){
+
+    getSentenceList() {
         fetch(
-            config.back_domain+"/index.php?action=Sentence&method=list"
-        ).then((res)=>{
-            res.json().then((json)=>{
+            config.back_domain + "/index.php?action=Sentence&method=list"
+        ).then((res) => {
+            res.json().then((json) => {
                 this.setState({
-                    data:json.Data
+                    data: json.Data
                 })
             })
         })
     }
+
     componentDidMount() {
         this.getSentenceList();
     }
 
-    render(){
-        return(
+    render() {
+        return (
             <div className="container">
                 <diw className="row">
-                    <Header subTitle="Sentence List" />
+                    <Header subTitle="Sentence List"/>
                 </diw>
                 <div className="row">
                     <Roads
@@ -68,7 +70,7 @@ class SentenceList extends React.Component{
                 </div>
                 <div className="row">
                     <Button
-                        icon={<PlusCircleOutlined />}
+                        icon={<PlusCircleOutlined/>}
                         type="primary"
                         onClick={() => {
                             window.location = "/sentence/create/0"

@@ -7,6 +7,7 @@ class Header extends React.Component {
             subTitle: props.subTitle
         }
     }
+
     render() {
         return (
             <nav className="navbar navbar-default navbar-fixed-top">

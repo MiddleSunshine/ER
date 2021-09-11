@@ -2,50 +2,53 @@ import React from 'react';
 import Word from "./Word";
 import config from "../config/setting";
 
-class WordModel extends React.Component{
+class WordModel extends React.Component {
     constructor(props) {
         super(props);
-        this.state={
-            word:props.word,
-            id:0,
-            preWord:''
+        this.state = {
+            word: props.word,
+            id: 0,
+            preWord: ''
         }
-        this.getWordId=this.getWordId.bind(this);
+        this.getWordId = this.getWordId.bind(this);
     }
-    getWordId(word){
+
+    getWordId(word) {
         fetch(
-            config.back_domain+"/index.php?action=Words&method=GetID",
+            config.back_domain + "/index.php?action=Words&method=GetID",
             {
-                method:"post",
-                mode:"cors",
-                body:JSON.stringify({
-                    word:word
+                method: "post",
+                mode: "cors",
+                body: JSON.stringify({
+                    word: word
                 })
             }
-        ).then((res)=>{
+        ).then((res) => {
             res.json().then(
-                (json)=>{
+                (json) => {
                     this.setState({
-                        id:json.Data.ID,
-                        preWord:word
+                        id: json.Data.ID,
+                        preWord: word
                     })
                 }
-            ).catch((error)=>{
+            ).catch((error) => {
                 console.error(error)
             });
         })
     }
+
     componentWillReceiveProps(nextProps, nextContext) {
-        if (nextProps.word!=this.state.preWord){
+        if (nextProps.word != this.state.preWord) {
             this.getWordId(nextProps.word);
         }
     }
+
     componentDidMount() {
         this.getWordId(this.props.word);
     }
 
     render() {
-        return <Word id={this.state.id} defaultWord={this.props.word} />;
+        return <Word id={this.state.id} defaultWord={this.props.word}/>;
     }
 }
 

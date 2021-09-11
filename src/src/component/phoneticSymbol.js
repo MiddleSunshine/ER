@@ -1,101 +1,106 @@
 import React from "react";
 import config from "../config/setting";
 import "../css/symbolKeybord.css"
-import {Button,message} from "antd";
-import {FormOutlined,AudioOutlined,ClearOutlined} from "@ant-design/icons";
+import {Button, message} from "antd";
+import {FormOutlined, AudioOutlined, ClearOutlined} from "@ant-design/icons";
 import {symbolMap, getSymbolMap, saveSymbol, getSymbolString, getSymbolSaveData} from "./symbol";
 
 // https://www.hujiang.com/c/wx/p1288247/
 
 
-class PhoneticSymbol extends React.Component{
+class PhoneticSymbol extends React.Component {
     constructor(props) {
         super(props);
-        this.state={
-            media:'',
-            symbols:[],
-            sounds:'',
-            symbolMap:getSymbolMap()
+        this.state = {
+            media: '',
+            symbols: [],
+            sounds: '',
+            symbolMap: getSymbolMap()
         }
-        this.playMp3=this.playMp3.bind(this);
-        this.updateWords=this.updateWords.bind(this);
-        this.saveWords=this.saveWords.bind(this);
-        this.playSound=this.playSound.bind(this);
-        this.cleanWords=this.cleanWords.bind(this);
+        this.playMp3 = this.playMp3.bind(this);
+        this.updateWords = this.updateWords.bind(this);
+        this.saveWords = this.saveWords.bind(this);
+        this.playSound = this.playSound.bind(this);
+        this.cleanWords = this.cleanWords.bind(this);
     }
 
-    playMp3(source,img){
-        let symbol=img.slice(1,-1);
-        let symbols=this.state.symbols;
+    playMp3(source, img) {
+        let symbol = img.slice(1, -1);
+        let symbols = this.state.symbols;
         symbols.push(symbol);
         this.setState({
-            media:config.front_domain+"/media/"+source,
+            media: config.front_domain + "/media/" + source,
             symbols: symbols
         });
     }
-    updateWords(index){
-        let newSymbols=this.state.symbols.filter((current,i)=>{
-            return i!==index;
+
+    updateWords(index) {
+        let newSymbols = this.state.symbols.filter((current, i) => {
+            return i !== index;
         });
         this.setState({
-            symbols:newSymbols
+            symbols: newSymbols
         })
     }
-    saveWords(){
-        let symbols=this.state.symbols.join(",");
+
+    saveWords() {
+        let symbols = this.state.symbols.join(",");
         saveSymbol(symbols);
-        message.success("Save Success: / "+getSymbolString()+" /");
+        message.success("Save Success: / " + getSymbolString() + " /");
     }
-    cleanWords(){
+
+    cleanWords() {
         this.setState({
-            symbols:[]
+            symbols: []
         })
     }
-    playSound(index=0){
-        if (index>=this.state.symbols.length){
+
+    playSound(index = 0) {
+        if (index >= this.state.symbols.length) {
             return false;
         }
-        let sounds=this.state.symbols.map((key)=>{
+        let sounds = this.state.symbols.map((key) => {
             return this.state.symbolMap[key];
         });
         this.setState({
-            sounds:config.front_domain+"/media/"+sounds[index]
+            sounds: config.front_domain + "/media/" + sounds[index]
         });
-        setTimeout(()=>this.playSound(index+1),500);
+        setTimeout(() => this.playSound(index + 1), 500);
     }
+
     componentDidMount() {
-        let symbolList=getSymbolSaveData();
-        if (symbolList){
+        let symbolList = getSymbolSaveData();
+        if (symbolList) {
             this.setState({
-                symbols:symbolList.split(',')
+                symbols: symbolList.split(',')
             })
         }
 
     }
 
     render() {
-        return(
+        return (
             <div className={"table-responsive symbol-keyboard"}>
                 <div>
                     <Button
-                        style={{marginRight:"10px"}}
+                        style={{marginRight: "10px"}}
                         type={"primary"}
-                        icon={<FormOutlined />}
-                        onClick={()=>this.saveWords()}
+                        icon={<FormOutlined/>}
+                        onClick={() => this.saveWords()}
                     >
                         Save
                     </Button>
                     <Button
-                        icon={<AudioOutlined />}
+                        icon={<AudioOutlined/>}
                         type={"primary"}
-                        style={{marginRight:"10px"}}
-                        onClick={()=>this.playSound()}
+                        style={{marginRight: "10px"}}
+                        onClick={() => this.playSound()}
                     >
                     </Button>
-                    <ClearOutlined style={{marginRight:"10px"}} onClick={()=>this.cleanWords()} />
+                    <ClearOutlined style={{marginRight: "10px"}} onClick={() => this.cleanWords()}/>
                     <span>/</span>
-                    {this.state.symbols.map((item,index)=>{
-                        return <span onClick={()=>this.updateWords(index)}>{item}</span>;
+                    {this.state.symbols.map((item, index) => {
+                        return <span onClick={() => this.updateWords(index)}>{item}</span>;
                     })}
                     <span>/</span>
                 </div>
@@ -106,8 +111,9 @@ class PhoneticSymbol extends React.Component{
                             <td className={"symbol"} rowSpan={2}>单元音</td>
                             <td className={"symbol"}>长元音</td>
                             <td>
-                                {symbolMap.yuanyin.danyuanyin.changyuanyin.map((item)=>{
-                                    return <span onClick={()=>this.playMp3(item.media,item.img)} key={item.id}>{item.img}</span>
+                                {symbolMap.yuanyin.danyuanyin.changyuanyin.map((item) => {
+                                    return <span onClick={() => this.playMp3(item.media, item.img)}
+                                                 key={item.id}>{item.img}</span>
                                 })}
                             </td>
                         </tr>
@@ -115,8 +121,9 @@ class PhoneticSymbol extends React.Component{
                             <td className={"symbol"}>短元英</td>
                             <td>
                                 {
-                                    symbolMap.yuanyin.danyuanyin.duanyuanyin.map((item)=>{
-                                        return <span onClick={()=>this.playMp3(item.media,item.img)} key={item.id}>{item.img}</span>
+                                    symbolMap.yuanyin.danyuanyin.duanyuanyin.map((item) => {
+                                        return <span onClick={() => this.playMp3(item.media, item.img)}
+                                                     key={item.id}>{item.img}</span>
                                     })
                                 }
                             </td>
@@ -124,8 +131,9 @@ class PhoneticSymbol extends React.Component{
                         <tr>
                             <td className={"symbol"}>双元音</td>
                             <td colSpan={2}>
-                                {symbolMap.yuanyin.shuangyuanyin.map((item)=>{
-                                    return <span onClick={()=>this.playMp3(item.media,item.img)} key={item.id}>{item.img}</span>
+                                {symbolMap.yuanyin.shuangyuanyin.map((item) => {
+                                    return <span onClick={() => this.playMp3(item.media, item.img)}
+                                                 key={item.id}>{item.img}</span>
                                 })}
                             </td>
                         </tr>
@@ -137,8 +145,9 @@ class PhoneticSymbol extends React.Component{
                                 清辅音
                             </td>
                             <td colSpan={2}>
-                                {symbolMap.fuyin.qitafuyin.map((item)=>{
-                                    return <span onClick={()=>this.playMp3(item.media,item.img)} key={item.id}>{item.img}</span>
+                                {symbolMap.fuyin.qitafuyin.map((item) => {
+                                    return <span onClick={() => this.playMp3(item.media, item.img)}
+                                                 key={item.id}>{item.img}</span>
                                 })}
                             </td>
                         </tr>
@@ -147,8 +156,9 @@ class PhoneticSymbol extends React.Component{
                                 浊辅音
                             </td>
                             <td colSpan={2}>
-                                {symbolMap.fuyin.zhuofuyin.map((item)=>{
-                                    return <span onClick={()=>this.playMp3(item.media,item.img)} key={item.id}>{item.img}</span>
+                                {symbolMap.fuyin.zhuofuyin.map((item) => {
+                                    return <span onClick={() => this.playMp3(item.media, item.img)}
+                                                 key={item.id}>{item.img}</span>
                                 })}
                             </td>
                         </tr>
@@ -157,16 +167,17 @@ class PhoneticSymbol extends React.Component{
                                 其他辅音
                             </td>
                             <td colSpan={3}>
-                                {symbolMap.fuyin.qitafuyin.map((item)=>{
-                                    return <span onClick={()=>this.playMp3(item.media,item.img)} key={item.id}>{item.img}</span>
+                                {symbolMap.fuyin.qitafuyin.map((item) => {
+                                    return <span onClick={() => this.playMp3(item.media, item.img)}
+                                                 key={item.id}>{item.img}</span>
                                 })}
                             </td>
                         </tr>
                     </table>
                 </div>
-                <audio style={{display:"none"}} controls={"controls"} src={this.state.media} autoplay={"autoplay"}>
+                <audio style={{display: "none"}} controls={"controls"} src={this.state.media} autoplay={"autoplay"}>
                 </audio>
-                <audio style={{display:"none"}} controls={"controls"}  autoplay={"autoplay"} src={this.state.sounds}>
+                <audio style={{display: "none"}} controls={"controls"} autoplay={"autoplay"} src={this.state.sounds}>
                 </audio>
             </div>
         )
