@@ -21,7 +21,7 @@ class Word extends React.Component {
         this.handleValueChange=this.handleValueChange.bind(this);
         this.updateMarkdownHtml=this.updateMarkdownHtml.bind(this);
     }
-    getWordDetail(id,forceUpdate=false) {
+    getWordDetail(id,forceUpdate=false,defaultWord='') {
         if(!forceUpdate){
             if (id == 0 || id===undefined) {
                 return false;
@@ -36,7 +36,11 @@ class Word extends React.Component {
                         }
                         return json;
                     }).then((json)=>{
-                        this.setState({ word: json.Data,preId:id,id:id })
+                        let word=json.Data.word;
+                        if (!word.ID){
+                            word.word=defaultWord;
+                        }
+                        this.setState({ word: word,preId:id,id:id })
                     })
                         .then(()=>{
                         this.updateMarkdownHtml();
@@ -121,7 +125,7 @@ class Word extends React.Component {
     }
     componentWillReceiveProps(nextProps, nextContext) {
         if(nextProps.id!=this.state.preId){
-            this.getWordDetail(nextProps.id,true);
+            this.getWordDetail(nextProps.id,true,nextProps.defaultWord);
         }
     }
 

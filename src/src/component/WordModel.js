@@ -45,7 +45,7 @@ class WordModel extends React.Component{
     }
 
     render() {
-        return <Word id={this.state.id} />;
+        return <Word id={this.state.id} defaultWord={this.props.word} />;
     }
 }
 

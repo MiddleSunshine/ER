@@ -36,6 +36,8 @@ class Sentence extends React.Component {
                     sentenceData: json.Data,
                     id:id
                 })
+            }).then(()=>{
+                this.updateMarkdownHtml();
             })
         }).catch((error) => {
             console.error(error);
@@ -68,7 +70,10 @@ class Sentence extends React.Component {
     updateMarkdownHtml() {
         if (!this.state.editNote) {
             if (this.state.sentenceData.note && this.state.sentenceData.note.length) {
-                document.getElementById(this.state.sentenceData.id + "_sentence_note").innerHTML = marked(this.state.sentenceData.note);
+                let documentElement=document.getElementById("sentence_note");
+                if(documentElement){
+                    documentElement.innerHTML = marked(this.state.sentenceData.note);
+                }
             }
         }
     }
@@ -109,7 +114,7 @@ class Sentence extends React.Component {
             </div>;
         } else {
             notePart = <div className="markdown-preview">
-                <div id={this.state.sentenceData.ID + "_sentence_note"}></div>
+                <div id={"sentence_note"}></div>
             </div>;
         }
         return (
