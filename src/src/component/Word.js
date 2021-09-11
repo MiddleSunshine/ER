@@ -36,10 +36,7 @@ class Word extends React.Component {
                         }
                         return json;
                     }).then((json)=>{
-                        let word=json.Data.word;
-                        if (!word.ID){
-                            word.word=defaultWord;
-                        }
+                        let word=json.Data;
                         this.setState({ word: word,preId:id,id:id })
                     })
                         .then(()=>{

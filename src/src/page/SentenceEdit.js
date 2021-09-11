@@ -17,11 +17,22 @@ class SentenceEdit extends React.Component{
             visible:false,
             updateWord:''
         }
+        this.getWords=this.getWords.bind(this);
         this.addWords=this.addWords.bind(this);
         this.deleteWord=this.deleteWord.bind(this);
         this.updateWord=this.updateWord.bind(this);
         this.updateWordDetail=this.updateWordDetail.bind(this);
         this.saveWordList=this.saveWordList.bind(this);
+    }
+    getWords(){
+        fetch(config.back_domain+"/index.php?action=Sentence&method=getWords&sentence_id="+this.state.id)
+            .then((res)=>{
+                res.json().then((json)=>{
+                    this.setState({
+                        wordsList:json.Data
+                    })
+                })
+            });
     }
     addWords(){
         let words=this.state.wordsList;
@@ -87,6 +98,12 @@ class SentenceEdit extends React.Component{
             console.error(error);
         })
     }
+    componentDidMount() {
+        if (this.state.id){
+            this.getWords();
+        }
+    }
+
     render(){
         let words=this.state.wordsList.map((value,index)=>{
             return <Row key={index} justify="center" alian={"center"} style={{paddingTop:"10px"}}>

@@ -2,12 +2,12 @@
 require_once __DIR__.DIRECTORY_SEPARATOR."class.Base.php";
 
 class Words extends Base{
-    protected $table='words';
+    public static $table='words';
 
     public function GetID(){
         $this->post=json_decode($this->post,1);
         $word=$this->post['word'] ?? '';
-        $sql="select ID from {$this->table} where word='{$word}';";
+        $sql=sprintf("select ID from %s where word='{$word}';",static::$table);
         $word=$this->pdo->getFirstRow($sql);
         return self::returnActionResult([
             'ID'=>$word['ID'] ?? 0
@@ -17,9 +17,9 @@ class Words extends Base{
         if (empty($word)){
             return 0;
         }
-        $sql=sprintf("insert into words(word,AddTime,LastUpdateTime) value('%s','%s','%s')",$word,date("Y-m-d H:i:s"),date("Y-m-d H:i:s"));
+        $sql=sprintf("insert into %s(word,AddTime,LastUpdateTime) value('%s','%s','%s')",static::$table,$word,date("Y-m-d H:i:s"),date("Y-m-d H:i:s"));
         $this->pdo->query($sql);
-        $sql=sprintf("select ID from words where word='%s';",$word);
+        $sql=sprintf("select ID from %s where word='%s';",static::$table,$word);
         $wordData=$this->pdo->getFirstRow($sql);
         return $wordData['ID'] ?? 0;
     }

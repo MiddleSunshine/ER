@@ -2,7 +2,7 @@
 require_once __DIR__.DIRECTORY_SEPARATOR."class.Base.php";
 
 class Sentence extends Base{
-    protected $table='sentences';
+    public static $table='sentences';
 
     public function Save(){
         $id=$this->get['id'] ?? 0;
@@ -57,5 +57,12 @@ class Sentence extends Base{
         }
         $sentenceWord=new SentenceWord();
         return $sentenceWord->updateSentenceWord($sentenceId,$wordIds);
+    }
+    public function getWords(){
+        $sentenceId=$this->get['sentence_id'] ?? 0;
+        $sentenceWord=new SentenceWord();
+        return self::returnActionResult(
+            $sentenceWord->getRelatedWords($sentenceId)
+        );
     }
 }
