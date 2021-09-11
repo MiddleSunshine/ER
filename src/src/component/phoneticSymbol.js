@@ -65,7 +65,7 @@ class PhoneticSymbol extends React.Component{
     }
     componentDidMount() {
         let symbolList=getSymbolSaveData();
-        if (symbolList.length){
+        if (symbolList){
             this.setState({
                 symbols:symbolList.split(',')
             })
@@ -75,7 +75,7 @@ class PhoneticSymbol extends React.Component{
 
     render() {
         return(
-            <div className={"table-responsive"}>
+            <div className={"table-responsive symbol-keyboard"}>
                 <div>
                     <Button
                         style={{marginRight:"10px"}}
