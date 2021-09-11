@@ -14,6 +14,10 @@ class Words extends Base{
         ]);
     }
     public function addNewWord($word){
+        static $checkPlan;
+        if (!$checkPlan){
+            $checkPlan=new CheckPlan();
+        }
         if (empty($word)){
             return 0;
         }
@@ -21,6 +25,7 @@ class Words extends Base{
         $this->pdo->query($sql);
         $sql=sprintf("select ID from %s where word='%s';",static::$table,$word);
         $wordData=$this->pdo->getFirstRow($sql);
+        $checkPlan->addCheckPlan($wordData['ID']);
         return $wordData['ID'] ?? 0;
     }
     public function Save(){
@@ -53,6 +58,9 @@ class Words extends Base{
         }
         empty($sql['AddTime']) && $sql['AddTime']=addslashes(date("Y-m-d H:i:s"));
         empty($sql['LastUpdateTime']) && $sql['LastUpdateTime']=addslashes(date("Y-m-d H:i:s"));
-        return $this->handleSql($sql,$id,'word');
+        $returnData=$this->handleSql($sql,$id,'word');
+        $checkPlan=new CheckPlan();
+        $checkPlan->addCheckPlan($returnData['ID']);
+        return $returnData;
     }
 }

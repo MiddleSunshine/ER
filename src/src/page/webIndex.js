@@ -15,6 +15,7 @@ class webIndex extends React.Component {
                             <ul class="nav nav-sidebar">
                                 <li><a href="/sentence/list">Sentence List</a></li>
                                 <li><a href="/words/list">Words List</a></li>
+                                <li><a href="/check/list">Check Words List</a></li>
                             </ul>
                         </div>
                     </div>

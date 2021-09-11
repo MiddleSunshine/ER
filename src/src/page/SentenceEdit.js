@@ -3,7 +3,7 @@ import Header from "../component/Header";
 import Roads from "../component/Roads";
 import config from "../config/setting";
 import Sentence from "../component/Sentence";
-import {Button, Col, Input, Modal, Row, Alert} from "antd";
+import {Button, Col, Input, Modal, Row, Alert, message} from "antd";
 import {DeleteOutlined, EditOutlined, FormOutlined, SaveOutlined} from "@ant-design/icons";
 import WordModel from "../component/WordModel";
 
@@ -81,25 +81,34 @@ class SentenceEdit extends React.Component {
     }
 
     saveWordList() {
-        fetch(
-            config.back_domain + "/index.php?action=sentence&method=saveWords",
-            {
-                method: "post",
-                body: JSON.stringify({
-                    'word_list': this.state.wordsList,
-                    'sentence_id': this.state.id
-                })
-            }
-        ).then((res) => {
-            res.json().then((json) => {
-                let status = json.Status;
-                if (status != 1) {
-                    alert(json.Message)
+        if (this.state.id==0) {
+            message.error("Please save the sentence first.");
+        }else if (this.state.wordsList.length==0){
+            message.warn("Please input word");
+        } else{
+            fetch(
+                config.back_domain + "/index.php?action=sentence&method=saveWords",
+                {
+                    method: "post",
+                    body: JSON.stringify({
+                        'word_list': this.state.wordsList,
+                        'sentence_id': this.state.id
+                    })
                 }
-            });
-        }).catch((error) => {
-            console.error(error);
-        })
+            ).then((res) => {
+                res.json().then((json) => {
+                    let status = json.Status;
+                    if (status != 1) {
+                        message.error(json.Message);
+                    }else{
+                        message.success("Save Success");
+                    }
+                });
+            }).catch((error) => {
+                console.error(error);
+            })
+        }
+
     }
 
     componentDidMount() {

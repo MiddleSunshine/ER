@@ -30,7 +30,7 @@ class Sentence extends Base{
         return $this->handleSql($sql,$id,'sentence');
     }
 
-    public function saveWords(){
+    public function SaveWords(){
         $this->post=json_decode($this->post,1);
         $sentenceId=$this->post['sentence_id'] ?? 0;
         if (!$sentenceId){
@@ -58,11 +58,27 @@ class Sentence extends Base{
         $sentenceWord=new SentenceWord();
         return $sentenceWord->updateSentenceWord($sentenceId,$wordIds);
     }
-    public function getWords(){
+    public function GetWords(){
         $sentenceId=$this->get['sentence_id'] ?? 0;
         $sentenceWord=new SentenceWord();
         return self::returnActionResult(
             $sentenceWord->getRelatedWords($sentenceId)
+        );
+    }
+
+    public function GetSentenceByWordId(){
+        $wordId=$this->get["word_id"] ?? 0;
+        if (!$wordId){
+            return self::returnActionResult([]);
+        }
+        $sql=sprintf("select Sentence_ID from %s where Word_ID=%d",SentenceWord::$table,$wordId);
+        $sentenceIds=$this->pdo->getRows($sql,'Sentence_ID');
+        if (empty($sentenceIds)){
+            return self::returnActionResult([]);
+        }
+        $sql=sprintf("select * from %s where ID in (%s)",Sentence::$table,implode(",",array_keys($sentenceIds)));
+        return self::returnActionResult(
+            $this->pdo->getRows($sql)
         );
     }
 }
