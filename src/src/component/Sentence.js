@@ -1,7 +1,7 @@
 import React from 'react';
 import config from "../config/setting";
-import {Form, Input, Button, Row, Col,Modal} from 'antd';
-import {SaveOutlined, EditOutlined,FormOutlined,DeleteOutlined} from '@ant-design/icons'
+import {Form, Input, Button, Row, Col, Modal} from 'antd';
+import {SaveOutlined, EditOutlined, FormOutlined, DeleteOutlined} from '@ant-design/icons'
 import WordModel from "./WordModel";
 
 const marked = require("marked");
@@ -13,10 +13,10 @@ class Sentence extends React.Component {
             id: props.id,
             sentenceData: {},
             editNote: false,
-            wordsList:[],
-            wordsCount:0,
-            visible:false,
-            afterSaveUrl:props.afterSaveUrl
+            wordsList: [],
+            wordsCount: 0,
+            visible: false,
+            afterSaveUrl: props.afterSaveUrl
         }
         this.getSentenceDetail = this.getSentenceDetail.bind(this);
         this.handleValueChange = this.handleValueChange.bind(this);
@@ -25,7 +25,7 @@ class Sentence extends React.Component {
     }
 
     getSentenceDetail(id) {
-        if (id==0 || id==undefined){
+        if (id == 0 || id == undefined) {
             return false;
         }
         fetch(
@@ -34,8 +34,10 @@ class Sentence extends React.Component {
             res.json().then((json) => {
                 this.setState({
                     sentenceData: json.Data,
-                    id:id
+                    id: id
                 })
+            }).then(() => {
+                this.updateMarkdownHtml();
             })
         }).catch((error) => {
             console.error(error);
@@ -68,7 +70,10 @@ class Sentence extends React.Component {
     updateMarkdownHtml() {
         if (!this.state.editNote) {
             if (this.state.sentenceData.note && this.state.sentenceData.note.length) {
-                document.getElementById(this.state.sentenceData.id + "_sentence_note").innerHTML = marked(this.state.sentenceData.note);
+                let documentElement = document.getElementById("sentence_note");
+                if (documentElement) {
+                    documentElement.innerHTML = marked(this.state.sentenceData.note);
+                }
             }
         }
     }
@@ -79,19 +84,19 @@ class Sentence extends React.Component {
 
     saveSentence() {
         console.log(this.state.sentenceData);
-        fetch(config.back_domain+"/index.php?action=sentence&method=save&id="+this.state.id,{
-            method:"post",
-            body:JSON.stringify(this.state.sentenceData)
-        }).then((res)=>{
-            res.json().then((json)=>{
+        fetch(config.back_domain + "/index.php?action=sentence&method=save&id=" + this.state.id, {
+            method: "post",
+            body: JSON.stringify(this.state.sentenceData)
+        }).then((res) => {
+            res.json().then((json) => {
                 this.getSentenceDetail(json.Data.ID);
                 return json.Data.ID;
-            }).then((ID)=>{
-                if(this.state.afterSaveUrl){
-                    window.location.href=this.state.afterSaveUrl+ID;
+            }).then((ID) => {
+                if (this.state.afterSaveUrl) {
+                    window.location.href = this.state.afterSaveUrl + ID;
                 }
             })
-        }).catch((error)=>{
+        }).catch((error) => {
             console.error(error);
         })
     }
@@ -109,7 +114,7 @@ class Sentence extends React.Component {
             </div>;
         } else {
             notePart = <div className="markdown-preview">
-                <div id={this.state.sentenceData.ID + "_sentence_note"}></div>
+                <div id={"sentence_note"}></div>
             </div>;
         }
         return (

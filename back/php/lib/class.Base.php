@@ -2,7 +2,7 @@
 require_once __DIR__.DIRECTORY_SEPARATOR."class.MySqlPdo.php";
 
 class Base{
-    protected $table='';
+    public static $table='';
     protected $get;
     protected $post;
     protected $pdo;
@@ -16,7 +16,7 @@ class Base{
     public function List(){
         $page=$this->get['page'] ?? 0;
         $pageSize=$this->get['page_size'] ?? 0;
-        $sql="select * from {$this->table}";
+        $sql="select * from ".static::$table;
         if ($page && $pageSize){
             $sql=sprintf($sql." limit %d,%d",($page-1)*$pageSize,$pageSize);
         }
@@ -31,7 +31,7 @@ class Base{
         if (!$id){
             return self::returnActionResult([],false,"参数错误，没有ID");
         }
-        $sql="select * from {$this->table} where ID={$id};";
+        $sql=sprintf("select * from %s where ID={$id};",static::$table);
         return self::returnActionResult($this->pdo->getFirstRow($sql));
     }
 
@@ -55,7 +55,7 @@ class Base{
             }
             $sql=implode(",",$sqlTemplate);
             // udpate
-            $sql="update {$this->table} set {$sql} where ID={$id};";
+            $sql=sprintf("update %s set {$sql} where ID={$id};",static::$table);
         }else{
             $sqlTemplate='';
             foreach ($sql as $filed=>$value){
@@ -63,16 +63,16 @@ class Base{
             }
             $sqlTemplate=substr($sqlTemplate,0,-1);
             // insert 之前已有的值，然后就会变成 update
-            $sqlSearch=sprintf("select {$keyName},ID from {$this->table} where {$keyName}='%s'",$this->post[$keyName]);
+            $sqlSearch=sprintf("select {$keyName},ID from %s where {$keyName}='%s'",static::$table,$this->post[$keyName]);
             $data=$this->pdo->getFirstRow($sqlSearch);
             if (!empty($data)){
                 return $this->handleSql($sql,$data['ID'],$keyName);
             }
             // insert
-            $sql=sprintf("insert into {$this->table}(%s) value(%s)",implode(",",array_keys($sql)),$sqlTemplate);
+            $sql=sprintf("insert into %s(%s) value(%s)",static::$table,implode(",",array_keys($sql)),$sqlTemplate);
         }
         $this->pdo->query($sql);
-        $sql=sprintf("select ID from {$this->table} where {$keyName}='%s';",$this->post[$keyName] ?? '');
+        $sql=sprintf("select ID from %s where {$keyName}='%s';",static::$table,$this->post[$keyName] ?? '');
         $word=$this->pdo->getFirstRow($sql);
         return self::returnActionResult([
             'sql'=>$sql,
