@@ -58,7 +58,6 @@ class WordsList extends React.Component {
             .then(
                 (res) => {
                     res.json().then((json) => {
-                        console.log(json.Data);
                         this.setState({
                             data: json.Data
                         })
