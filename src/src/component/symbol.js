@@ -259,6 +259,8 @@ export var symbolMap={
     }
 };
 
+let sessionStorageKey="symbols";
+
 export var getSymbolMap=()=>{
     let map={};
     symbolMap.yuanyin.danyuanyin.changyuanyin.map((item)=>{
@@ -289,6 +291,10 @@ export var getSymbolMap=()=>{
 };
 
 export var saveSymbol=(symbols)=>{
-    sessionStorage.setItem("symbols",symbols);
-    let symbol=sessionStorage.getItem("symbols").split(",").join('');
+    sessionStorage.setItem(sessionStorageKey,symbols);
+}
+
+export var getSymbolString=()=>{
+    let symbols=sessionStorage.getItem(sessionStorageKey);
+    return symbols.split(",").join("");
 }

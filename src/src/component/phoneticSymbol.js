@@ -3,7 +3,7 @@ import config from "../config/setting";
 import "../css/symbolKeybord.css"
 import {Button,message} from "antd";
 import {FormOutlined,AudioOutlined,ClearOutlined} from "@ant-design/icons";
-import {symbolMap,getSymbolMap,saveSymbol} from "./symbol";
+import {symbolMap,getSymbolMap,saveSymbol,getSymbolString} from "./symbol";
 
 // https://www.hujiang.com/c/wx/p1288247/
 
@@ -44,7 +44,7 @@ class PhoneticSymbol extends React.Component{
     saveWords(){
         let symbols=this.state.symbols.join(",");
         saveSymbol(symbols);
-        message.success("Save Success: / "+symbols+" /");
+        message.success("Save Success: / "+getSymbolString()+" /");
     }
     cleanWords(){
         this.setState({
