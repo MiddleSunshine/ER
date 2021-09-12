@@ -1,4 +1,6 @@
 import React from 'react';
+import WordsCharts from "../component/charts/Words";
+
 
 class webIndex extends React.Component {
     render() {
@@ -19,6 +21,9 @@ class webIndex extends React.Component {
                             </ul>
                         </div>
                     </div>
+                </div>
+                <div className="container-fluid">
+                    <WordsCharts />
                 </div>
             </div>
 
