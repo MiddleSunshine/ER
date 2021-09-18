@@ -22,3 +22,5 @@ back/docker/php.hosts
 .idea/
 
 src/build/
+
+.DS_Store
